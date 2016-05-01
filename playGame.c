@@ -11,9 +11,6 @@
 #include <time.h>
 #include "2048.h"
 
-#define TRUE 1
-#define FALSE 0
-
 #define SQUARE_SIDES 4
 
 #define MAX_BUFFER 9
@@ -45,7 +42,7 @@ int main (int argc, char *argv[]) {
     while (getStatus(game) != TRUE) {
         scanf("%s", input);
         if (input[0] == QUIT) {
-            endGame(game);
+            endGame(game, END_QUIT);
         } else if (input[0] == HELP) {
             showHelp();
         } else if (input[0] == LEFT) {
@@ -74,6 +71,9 @@ int main (int argc, char *argv[]) {
         }
         if (getWon(game) == FALSE && winDetect(game)) {
             winGame();
+        }
+        if (stalemateDetect(game)) {
+            endGame(game, END_LOSE);
         }
     }
     return EXIT_SUCCESS;

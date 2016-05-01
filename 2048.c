@@ -4,7 +4,7 @@
 //  Nelson Odins-Jones, z5122504, nelsonoj
 //  01/05/2016
 //  Implementation of struct and game functions
-//  Detection of stalled game does not exist
+//  Detection of stalled game added as of 1700
 //
 
 #include <stdio.h>
@@ -12,9 +12,6 @@
 #include <string.h>
 #include <assert.h>
 #include "2048.h"
-
-#define TRUE 1
-#define FALSE 0
 
 #define SIZE 4
 #define EMPTY 0
@@ -174,6 +171,48 @@ int winDetect (Twenty game) {
     return isWin;
 }
 
+int stalemateDetect (Twenty game) {
+    assert(game != NULL);
+    int isStale = TRUE;
+    int i = 0;
+    // if the board isn't full then it can't be over
+    while (i < SIZE * SIZE && isStale) {
+        if (game->board[0][i] == EMPTY) {
+            isStale = FALSE;
+        }
+        i++;
+    }
+    // if the board is full and nothing is adjacent to
+    // a tile of the same value, it is over
+    int y = 0;
+    while (y < SIZE && isStale) {
+        int x = 0;
+        while (x < SIZE && isStale) {
+            if (game->board[x][y] == game->board[x+1][y]) {
+                isStale = FALSE;
+            }
+            x++;
+        }
+        y++;
+    }
+    rotateClockwise(game);
+    y = 0;
+    while (y < SIZE && isStale) {
+        int x = 0;
+        while (x < SIZE && isStale) {
+            if (game->board[x][y] == game->board[x+1][y]) {
+                isStale = FALSE;
+            }
+            x++;
+        }
+        y++;
+    }
+    rotateClockwise(game);
+    rotateClockwise(game);
+    rotateClockwise(game);
+    return isStale;
+}
+
 int getWon (Twenty game) {
     assert(game != NULL);
     return game->won;
@@ -184,11 +223,14 @@ int getStatus (Twenty game) {
     return game->gameOver;
 }
 
-void endGame (Twenty game) {
+void endGame (Twenty game, int type) {
     assert(game != NULL);
     assert(getStatus(game) == FALSE);
     game->gameOver = TRUE;
     free(game);
+    if (type == END_LOSE) {
+        printf("Game Over!\n");
+    }
     printf("Goodbye!\n");
 
 }

@@ -8,6 +8,12 @@
 
 typedef struct _twenty *Twenty;
 
+#define TRUE 1
+#define FALSE 0
+
+#define END_LOSE 0
+#define END_QUIT 1
+
 Twenty makeNewGame (void);
 void newTile (Twenty game);
 
@@ -21,8 +27,9 @@ void swap (int *first, int *second);
 void printBoard (Twenty game);
 
 int winDetect (Twenty game);
+int stalemateDetect (Twenty game);
 int getWon (Twenty game);
 int getStatus (Twenty game);
-void endGame (Twenty game);
+void endGame (Twenty game, int type);
 
 
