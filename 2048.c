@@ -228,6 +228,7 @@ void endGame (Twenty game, int type) {
     assert(getStatus(game) == FALSE);
     game->gameOver = TRUE;
     free(game);
+    game = NULL;
     if (type == END_LOSE) {
         printf("Game Over!\n");
     }
