@@ -76,9 +76,6 @@ int main (int argc, char *argv[]) {
             endGame(game, END_LOSE);
         }
     }
-    if (game != NULL) {
-        free(game);
-    }
     return EXIT_SUCCESS;
 }
 
