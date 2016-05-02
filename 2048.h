@@ -25,6 +25,7 @@ void rotateClockwise (Twenty game);
 void swap (int *first, int *second);
 
 void printBoard (Twenty game);
+char *colorString (int tile);
 
 int winDetect (Twenty game);
 int stalemateDetect (Twenty game);

@@ -11,7 +11,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 #include "2048.h"
+#include "colors.h"
 
 #define SIZE 4
 #define EMPTY 0
@@ -61,7 +63,7 @@ void printBoard (Twenty game) {
             if (game->board[x][y] == EMPTY) {
                 printf("%c\t", PLAIN_BOARD);
             } else {
-                printf("%d\t", game->board[x][y]);
+                printf(colorString(game->board[x][y]), game->board[x][y]);
             }
             x++;
         }
@@ -70,6 +72,17 @@ void printBoard (Twenty game) {
         y++;
     }
     printf("\n");
+}
+
+char *colorString (int tile) {
+    char *colors[NUM_COLORS] = {
+        FG_RED,  FG_GREEN,   FG_YELLOW,
+        FG_BLUE, FG_MAGENTA, FG_CYAN,
+        BG_RED,  BG_GREEN,   BG_YELLOW,
+        BG_BLUE, BG_MAGENTA, BG_CYAN
+    };
+    
+    return colors[(int)log2(tile) + 1];
 }
 
 void newTile (Twenty game) {
