@@ -31,18 +31,22 @@ Twenty makeNewGame (void) {
     Twenty newGame = malloc(sizeof(struct _twenty));
     assert(newGame != NULL);
     
-    int i = 0;
-    while (i < SIZE * SIZE) {
-        newGame->board[0][i] = EMPTY;
-        i++;
+    int y = 0;
+    while (y < SIZE) {
+        int x = 0;
+        while (x < SIZE) {
+            newGame->board[x][y] = EMPTY;
+            x++;
+        }
+        y++;
     }
     newGame->orientation = 0;
     newGame->gameOver = FALSE;
     
-    i = 0;
-    while (i < INIT_TILES) {
+    y = 0;
+    while (y < INIT_TILES) {
         newTile(newGame);
-        i++;
+        y++;
     }
 
     return newGame;
@@ -162,11 +166,15 @@ void swap (int *first, int *second) {
 int winDetect (Twenty game) {
     assert(game != NULL);
     int isWin = 0;
-    int i = 0;
-    while (i < SIZE * SIZE && !isWin) {
-        isWin = (game->board[0][i] == WIN);
-        game->won = isWin;
-        i++;
+    int y = 0;
+    while (y < SIZE) {
+        int x = 0;
+        while (x < SIZE) {
+            isWin = (game->board[x][y] == WIN);
+            game->won = isWin;
+            x++;
+        }
+        y++;
     }
     return isWin;
 }
@@ -174,17 +182,21 @@ int winDetect (Twenty game) {
 int stalemateDetect (Twenty game) {
     assert(game != NULL);
     int isStale = TRUE;
-    int i = 0;
+    int y = 0;
     // if the board isn't full then it can't be over
-    while (i < SIZE * SIZE && isStale) {
-        if (game->board[0][i] == EMPTY) {
-            isStale = FALSE;
+    while (y < SIZE) {
+        int x = 0;
+        while (x < SIZE) {
+            if (game->board[x][y] == EMPTY) {
+                isStale = FALSE;
+            }
+            x++;
         }
-        i++;
+        y++;
     }
     // if the board is full and nothing is adjacent to
     // a tile of the same value, it is over
-    int y = 0;
+    y = 0;
     while (y < SIZE && isStale) {
         int x = 0;
         while (x < SIZE && isStale) {
