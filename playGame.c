@@ -1,5 +1,5 @@
 //
-//  2048.c
+//  playGame.c
 //
 //  Nelson Odins-Jones, z5122504, nelsonoj
 //  01/05/2016
