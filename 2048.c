@@ -32,7 +32,7 @@ struct _twenty{
 Twenty makeNewGame (void) {
     Twenty newGame = malloc(sizeof(struct _twenty));
     assert(newGame != NULL);
-    
+
     int y = 0;
     while (y < SIZE) {
         int x = 0;
@@ -44,7 +44,7 @@ Twenty makeNewGame (void) {
     }
     newGame->orientation = 0;
     newGame->gameOver = FALSE;
-    
+
     y = 0;
     while (y < INIT_TILES) {
         newTile(newGame);
@@ -81,7 +81,7 @@ char *colorString (int tile) {
         BG_RED,  BG_GREEN,   BG_YELLOW,
         BG_BLUE, BG_MAGENTA, BG_CYAN
     };
-    
+
     return colors[(int)log2(tile) + 1];
 }
 
@@ -93,7 +93,7 @@ void newTile (Twenty game) {
     while (!added && i > 0) {
         int randX = rand() % SIZE;
         int randY = rand() % SIZE;
-        if (game->board[randX][randY] == EMPTY) { 
+        if (game->board[randX][randY] == EMPTY) {
             // 10% chance of new tile being a four
             game->board[randX][randY] = startTiles[(rand() % 10 == 9)];
             added = TRUE;
@@ -126,7 +126,7 @@ void collapseRow (Twenty game, int y) {
                 }
                 scan++;
             }
-            
+
         }
         x++;
     }
@@ -258,5 +258,4 @@ void endGame (Twenty game, int type) {
         printf("Game Over!\n");
     }
     printf("Goodbye!\n");
-
 }
