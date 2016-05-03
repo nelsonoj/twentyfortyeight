@@ -13,8 +13,6 @@
 
 #define SQUARE_SIDES 4
 
-#define MAX_BUFFER 9
-
 #define NUM_ACTIONS 6
 #define LEFT 'a'
 #define DOWN 's'
@@ -28,31 +26,31 @@ void showHelp (void);
 void winGame (void);
 
 int main (int argc, char *argv[]) {
-    
+
     srand(time(NULL));
     Twenty game = makeNewGame();
     greet();
     printBoard(game);
-    
-    char actions[NUM_ACTIONS] = { LEFT, DOWN, RIGHT, UP,
-        HELP, QUIT };
-    
-    char input[MAX_BUFFER];
-    
+
+    char actions[NUM_ACTIONS] = { LEFT, DOWN, RIGHT,
+                                  UP, HELP, QUIT };
+
+    char input;
+
     while (getStatus(game) != TRUE) {
-        scanf("%s", input);
-        if (input[0] == QUIT) {
+        input = getchar();
+        if (input == QUIT) {
             endGame(game, END_QUIT);
-        } else if (input[0] == HELP) {
+        } else if (input == HELP) {
             showHelp();
-        } else if (input[0] == LEFT) {
+        } else if (input == LEFT) {
             moveLeft(game);
             newTile(game);
             printBoard(game);
         } else {
             int i = 1;
             while (i < NUM_ACTIONS) {
-                if (input[0] == actions[i]) {
+                if (input == actions[i]) {
                     int j = 0;
                     while (j < i) {
                         rotateClockwise(game);

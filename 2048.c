@@ -181,9 +181,9 @@ int winDetect (Twenty game) {
     assert(game != NULL);
     int isWin = 0;
     int y = 0;
-    while (y < SIZE) {
+    while (y < SIZE && !isWin) {
         int x = 0;
-        while (x < SIZE) {
+        while (x < SIZE && !isWin) {
             isWin = (game->board[x][y] == WIN);
             game->won = isWin;
             x++;
@@ -198,9 +198,9 @@ int stalemateDetect (Twenty game) {
     int isStale = TRUE;
     int y = 0;
     // if the board isn't full then it can't be over
-    while (y < SIZE) {
+    while (y < SIZE && isStale) {
         int x = 0;
-        while (x < SIZE) {
+        while (x < SIZE && isStale) {
             if (game->board[x][y] == EMPTY) {
                 isStale = FALSE;
             }
