@@ -259,5 +259,4 @@ void endGame (Twenty game, int type) {
         printf("Game Over!\n");
     }
     printf("Goodbye!\n");
-
 }
