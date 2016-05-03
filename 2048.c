@@ -75,14 +75,15 @@ void printBoard (Twenty game) {
 }
 
 char *colorString (int tile) {
+
     char *colors[NUM_COLORS] = {
-        FG_RED,  FG_GREEN,   FG_YELLOW,
-        FG_BLUE, FG_MAGENTA, FG_CYAN,
-        BG_RED,  BG_GREEN,   BG_YELLOW,
-        BG_BLUE, BG_MAGENTA, BG_CYAN
+        FG_YELLOW, FG_BLUE, FG_MAGENTA,
+        FG_CYAN,   FG_RED,  FG_GREEN,
+        BG_YELLOW, BG_BLUE, BG_MAGENTA,
+        BG_CYAN,   BG_RED,  BG_GREEN
     };
 
-    return colors[(int)log2(tile) + 1];
+    return colors[((int)log2(tile) - 1) % (NUM_COLORS-1)];
 }
 
 void newTile (Twenty game) {
@@ -258,4 +259,5 @@ void endGame (Twenty game, int type) {
         printf("Game Over!\n");
     }
     printf("Goodbye!\n");
+
 }
