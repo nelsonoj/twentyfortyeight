@@ -91,7 +91,6 @@ void showHelp (void) {
     printf("Controls: %c %c %c %c to move, %c to exit, and %c to show this help.\n",
            UP, LEFT, DOWN, RIGHT, QUIT, HELP);
     printf("\n");
-
 }
 
 void winGame (void) {
