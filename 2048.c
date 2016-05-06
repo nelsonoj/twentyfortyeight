@@ -12,6 +12,7 @@
 #include <string.h>
 #include <assert.h>
 #include <math.h>
+#include <time.h>
 #include "2048.h"
 #include "colors.h"
 
@@ -22,12 +23,21 @@
 #define INIT_TILES 2
 #define WIN 2048
 
+#define FILE_NAME "save"
+#define TIME_SIZE 19
+#define FILE_SIZE 39
+#define EMPTY_TILE 'e'
+
 struct _twenty{
     int board[SIZE][SIZE];
-    int orientation;
     int gameOver;
     int won;
 };
+
+typedef unsigned char bits8;
+
+void swap (int *first, int *second);
+int power (int x, unsigned int exponent);
 
 Twenty makeNewGame (void) {
     Twenty newGame = malloc(sizeof(struct _twenty));
@@ -42,8 +52,8 @@ Twenty makeNewGame (void) {
         }
         y++;
     }
-    newGame->orientation = 0;
     newGame->gameOver = FALSE;
+    newGame->won = FALSE;
 
     y = 0;
     while (y < INIT_TILES) {
@@ -257,6 +267,95 @@ void endGame (Twenty game, int type) {
     game = NULL;
     if (type == END_LOSE) {
         printf("Game Over!\n");
+    } else if (type == END_QUIT) {
+        printf("Saving game...\n");
     }
     printf("Goodbye!\n");
+}
+
+void saveGame (Twenty game) {
+    time_t rawtime;
+    struct tm *timeinfo;
+    char timeString[TIME_SIZE+1];
+    
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+    strftime (timeString, TIME_SIZE, "%F %R:%S", timeinfo);
+    
+    FILE *savefile;
+    savefile = fopen(FILE_NAME, "wb");
+    assert ((savefile!=NULL) && "Cannot open file");
+    
+    char header[sizeof(int)+1];
+    sprintf(header, "%d", WIN);
+    fwrite (header, strlen(header), 1, savefile);
+    fwrite (timeString, strlen(timeString), 1, savefile);
+    int y = 0;
+    while (y < SIZE) {
+        int x = 0;
+        while (x < SIZE) {
+            bits8 boardSquare;
+            if (game->board[x][y] == EMPTY) {
+                boardSquare = EMPTY_TILE;
+            } else {
+                boardSquare = (bits8)log2(game->board[x][y]);
+            }
+            fwrite (&boardSquare, sizeof boardSquare, 1, savefile);
+            x++;
+        }
+        y++;
+    }
+    bits8 won = (bits8)game->won;
+    fwrite (&won, sizeof won, 1, savefile);
+
+    fclose(savefile);
+}
+
+void loadGame (Twenty game) {
+    FILE *savefile;
+    savefile = fopen(FILE_NAME, "rb");
+    assert ((savefile!=NULL) && "Cannot open file");
+    
+    char filebuffer[FILE_SIZE];
+    fread(filebuffer, FILE_SIZE, 1, savefile);
+    fclose(savefile);
+    
+    //if the first four arent 2048 crash
+    
+    int index = sizeof(int);
+    char timeString[TIME_SIZE + 1];
+    strncpy(timeString, filebuffer+index, TIME_SIZE);
+    printf("Loading game from %s...\n", timeString);
+    printf("\n");
+    index += TIME_SIZE;
+    
+    int y = 0;
+    while (y < SIZE) {
+        int x = 0;
+        while (x < SIZE) {
+            if (filebuffer[index] == EMPTY_TILE) {
+                game->board[x][y] = EMPTY;
+            } else {
+                game->board[x][y] = power(2, filebuffer[index]);
+            }
+            index++;
+            x++;
+        }
+        y++;
+    }
+    game->gameOver = FALSE;
+    index++;
+    game->won = filebuffer[index];
+}
+
+int power (int x, unsigned int exponent) {
+    int i = 0;
+    int answer = 1;
+    if (exponent > 0) {
+        while (i < exponent) {
+            answer *= x;
+            i++;
+        }
+    }
+    return answer;
 }

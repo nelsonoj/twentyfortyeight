@@ -20,9 +20,7 @@ void newTile (Twenty game);
 void moveLeft (Twenty game);
 void collapseRow (Twenty game, int y);
 void collideRow (Twenty game, int y);
-
 void rotateClockwise (Twenty game);
-void swap (int *first, int *second);
 
 void printBoard (Twenty game);
 char *colorString (int tile);
@@ -33,4 +31,5 @@ int getWon (Twenty game);
 int getStatus (Twenty game);
 void endGame (Twenty game, int type);
 
-
+void saveGame (Twenty game);
+void loadGame (Twenty game);

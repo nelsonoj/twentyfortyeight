@@ -13,13 +13,15 @@
 
 #define SQUARE_SIDES 4
 
-#define NUM_ACTIONS 6
+#define NUM_ACTIONS 7
+#define HELP 'h'
+#define QUIT 'q'
+#define LOAD 'l'
 #define LEFT 'a'
 #define DOWN 's'
 #define RIGHT 'd'
 #define UP 'w'
-#define HELP 'h'
-#define QUIT 'q'
+
 
 void greet (void);
 void showHelp (void);
@@ -32,27 +34,32 @@ int main (int argc, char *argv[]) {
     greet();
     printBoard(game);
 
-    char actions[NUM_ACTIONS] = { LEFT, DOWN, RIGHT,
-                                  UP, HELP, QUIT };
+    char actions[NUM_ACTIONS] = { HELP, QUIT, LOAD,
+                                  LEFT, DOWN, RIGHT, UP };
 
     char input;
 
     while (getStatus(game) != TRUE) {
         input = getchar();
         if (input == QUIT) {
+            saveGame(game);
             endGame(game, END_QUIT);
         } else if (input == HELP) {
             showHelp();
-        } else if (input == LEFT) {
+        } else if (input == LOAD) {
+            loadGame(game);
+            printBoard(game);
+        }
+        else if (input == LEFT) {
             moveLeft(game);
             newTile(game);
             printBoard(game);
         } else {
-            int i = 1;
+            int i = 4;
             while (i < NUM_ACTIONS) {
                 if (input == actions[i]) {
                     int j = 0;
-                    while (j < i) {
+                    while (j < i-3) {
                         rotateClockwise(game);
                         j++;
                     }
@@ -79,15 +86,19 @@ int main (int argc, char *argv[]) {
 
 void greet (void) {
     printf("Welcome to Terminal 2048!\n");
-    printf("Controls: %c %c %c %c to move, %c to exit, and %c to show this help.\n",
-           UP, LEFT, DOWN, RIGHT, QUIT, HELP);
+    printf("Controls: %c %c %c %c to move, %c to save and exit,\n",
+           UP, LEFT, DOWN, RIGHT, QUIT);
+    printf("          %c to load a save, and %c to show this help.\n",
+           LOAD, HELP);
     printf("\n");
 }
 
 void showHelp (void) {
     printf("Terminal 2048 created on 1/5/16 by Nelson O-J\n");
-    printf("Controls: %c %c %c %c to move, %c to exit, and %c to show this help.\n",
-           UP, LEFT, DOWN, RIGHT, QUIT, HELP);
+    printf("Controls: %c %c %c %c to move, %c to save and exit,\n",
+           UP, LEFT, DOWN, RIGHT, QUIT);
+    printf("          %c to load a save, and %c to show this help.\n",
+           LOAD, HELP);
     printf("\n");
 }
 
